@@ -133,6 +133,24 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Database test endpoint
+app.get('/api/test-db', (req, res) => {
+  db.query('SELECT 1 as test', (err, results) => {
+    if (err) {
+      console.error('Database test failed:', err);
+      return res.status(500).json({ 
+        error: 'Database connection failed', 
+        details: err.message 
+      });
+    }
+    res.json({ 
+      message: 'Database connection successful', 
+      test: results[0],
+      timestamp: new Date().toISOString()
+    });
+  });
+});
+
 // Middleware to check if admin exists and get admin info
 const getAdminInfo = (req, res, next) => {
   const adminId = req.headers['user-id'];
