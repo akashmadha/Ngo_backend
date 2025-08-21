@@ -2,6 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+
 require("dotenv").config();
 
 // Log environment variables for debugging
@@ -348,7 +349,8 @@ app.post("/register", async (req, res) => {
   try {
     // Store password as plain text (for demo/simple use only)
     // Insert trust member into database
-    const sql = `INSERT INTO organization_members (
+    const sql = `INSERT INTO 
+    organization_members (
       organization_type, organization_name, pan_no, email, mobile_no, spoc_name, spoc_designation, reg_address, reg_city, reg_state, reg_pincode, reg_website, reg_date, password_hash
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
