@@ -66,3 +66,5 @@ console.log('2. If service is down, consider using Railway or local MySQL');
 console.log('3. Update your .env file with the correct database details');
 console.log('4. Test the connection again');
 
+
+

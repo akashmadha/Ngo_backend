@@ -326,3 +326,5 @@ async function setupAllTables() {
 // Run the setup
 setupAllTables();
 
+
+

@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node 
 
 // Test database connection script
 require('./dotenv.config');
@@ -121,3 +121,9 @@ process.on('uncaughtException', (err) => {
   console.error('\n❌ Uncaught Exception:', err.message);
   process.exit(1);
 });
+
+// Avoid running this script during Jest tests
+if (process.env.NODE_ENV === 'test') {
+  console.log('Skipping standalone DB test in test environment');
+  process.exit(0);
+}

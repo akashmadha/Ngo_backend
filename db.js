@@ -48,8 +48,10 @@ const testConnection = (retryCount = 0, maxRetries = 3) => {
   });
 };
 
-// Initial connection test
-testConnection();
+// Initial connection test (skip during tests to avoid noisy logs and async bleed)
+if (process.env.NODE_ENV !== 'test') {
+  testConnection();
+}
 
 // Handle pool errors
 pool.on('error', (err) => {
@@ -60,3 +62,11 @@ pool.on('error', (err) => {
 });
 
 module.exports = pool;
+
+// Allow graceful shutdown in tests and on app close
+module.exports.closePool = () => new Promise((resolve, reject) => {
+  pool.end((err) => {
+    if (err) return reject(err);
+    resolve();
+  });
+});

@@ -510,14 +510,16 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Test email connection
-transporter.verify(function(error, success) {
-  if (error) {
-    console.log("Email connection error:", error);
-  } else {
-    console.log("✅ Email server is ready to send messages");
-  }
-});
+// Test email connection (skip during tests)
+if (process.env.NODE_ENV !== 'test') {
+  transporter.verify(function(error, success) {
+    if (error) {
+      console.log("Email connection error:", error);
+    } else {
+      console.log("✅ Email server is ready to send messages");
+    }
+  });
+}
 
 // Generate 6-digit OTP
 function generateOTP() {
@@ -2090,25 +2092,30 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-// Start server with error handling
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL || 'Not set'}`);
-  console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🗄️ Database Host: ${process.env.DB_HOST || 'Not set'}`);
-  console.log(`📊 Database Port: ${process.env.DB_PORT || '3306 (default)'}`);
-});
+// Start server with error handling (skip when running tests or when imported)
+let server;
+if (process.env.NODE_ENV !== 'test' && !module.parent) {
+  server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL || 'Not set'}`);
+    console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🗄️ Database Host: ${process.env.DB_HOST || 'Not set'}`);
+    console.log(`📊 Database Port: ${process.env.DB_PORT || '3306 (default)'}`);
+  });
 
-// Handle server errors
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`❌ Port ${PORT} is already in use`);
-    console.error('💡 Try using a different port or stop the service using this port');
-  } else {
-    console.error('❌ Server error:', err);
-  }
-  process.exit(1);
-});
+  // Handle server errors
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`❌ Port ${PORT} is already in use`);
+      console.error('💡 Try using a different port or stop the service using this port');
+    } else {
+      console.error('❌ Server error:', err);
+    }
+    process.exit(1);
+  });
+}
+
+module.exports = app;
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (err) => {
