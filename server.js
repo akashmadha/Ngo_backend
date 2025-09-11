@@ -92,7 +92,8 @@ const upload = multer({
 // CORS configuration for production
 const allowedOrigins = process.env.NODE_ENV === 'production' 
   ? [
-      'https://ngo-front-j4kb.vercel.app',  // your Vercel frontend
+      'https://ngo-front-j4kb.vercel.app',  // old Vercel frontend
+      'https://ngo-linkup-react-23-copy.vercel.app', // current Vercel frontend
       process.env.FRONTEND_URL || 'https://ngo-front-j4kb.vercel.app',
       process.env.BACKEND_URL || 'https://ngo-backend-03vj.onrender.com'
     ]
